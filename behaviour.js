@@ -10,6 +10,14 @@ $(document).ready(function(){
     SC.connect(function(){
       $("#login-box").remove();
       $("#playlists-box").removeClass("hidden");
+
+      SC.get("/me/playlists",{}, function(resp, err){
+        $.each(resp, function(i, playlist){
+          var li = $("<li>").text(playlist.title);
+          $("#playlists").append(li);
+        });
+      });
+
     });
   });
 
