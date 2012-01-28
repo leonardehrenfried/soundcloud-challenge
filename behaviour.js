@@ -8,7 +8,8 @@ $(document).ready(function(){
   
   $("#login").click(function(){
     SC.connect(function(){
-      $("#login-box").hide();
+      $("#login-box").remove();
+      $("#playlists-box").removeClass("hidden");
     });
   });
 
