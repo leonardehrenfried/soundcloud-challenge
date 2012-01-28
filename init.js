@@ -3,7 +3,9 @@ $(document).ready(function(){
   var startApp = function(){
     $("#login-box").remove();
     $("#playlists-box").removeClass("hidden");
-    UI.refreshPlaylistList();
+    UI.refreshPlaylistList(function(){
+      UI.showPlaylist(UI.playlists[0]);
+    });
   };
 
   //initialise Soundcloud client library

@@ -9,7 +9,7 @@ UI={
    * Fetches playlists from the API and displays them on the left hand side
    * menu.
    */
-  refreshPlaylistList : function(){
+  refreshPlaylistList : function(callback){
     var that = this;
     SC.get("/me/playlists",{}, function(resp, err){
       if(err){
@@ -18,6 +18,9 @@ UI={
       else{
         that.playlists = resp;
         that.renderPlaylists(that.playlists);
+        if(callback){
+          callback();
+        }
       }
     }) 
   },
@@ -58,6 +61,13 @@ UI={
       playlistContainer.append($("<div>")
                                .text("This playlist doesn't contain any tracks yet."))
     }
+
+    var h4 = $("<h5>").text("Add tracks to this playlist");
+    var input = $("<input>").addClass("xlarge").attr("size", "30").attr("type","text");
+    input.march
+    playlistContainer
+      .append(h4)
+      .append(input);
   },
   
   /**
@@ -74,7 +84,7 @@ UI={
           else{
             that.showNotification("Playlist " + playlist.title + " has been deleted.");
             
-            // because of the api caching I have to remove the playlist client-side, too
+            // because of the api caching I have to remove the playlist client-side, too, how annoying
             var newPlaylists = [];
             $.each(that.playlists, function(i, oldPlaylist){
               if(oldPlaylist.id !== playlist.id){
@@ -119,10 +129,9 @@ UI={
             }, 
             function(response, error){
               if(error){
-                that.showNotification("Saving your playlist failed:"+error.message);
-                console.log(error);
+                that.showNotification("Saving your playlist failed: "+error.message);
               }
-            });
+      });
   },
 
   /**
