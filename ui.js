@@ -23,7 +23,15 @@ UI={
    * Displays a playlist in the right hand panel.
    */
   showPlaylist : function(playlist){
-    alert(playlist.title);
+    var playlistContainer = $("#playlist-detail").empty();
+    playlistContainer.append($("<h2>").text(playlist.title));
+
+    if(playlist.tracks.length < 0){
+    
+    }
+    else{
+      playlistContainer.append($("<div>").text("This playlist doesn't contain any tracks yet."))
+    }
   },
   
   /**
