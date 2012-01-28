@@ -63,11 +63,44 @@ UI={
     }
 
     var h4 = $("<h5>").text("Add tracks to this playlist");
-    var input = $("<input>").addClass("xlarge").attr("size", "30").attr("type","text");
-    input.march
+    var input = this.getSearchInput(playlist);
     playlistContainer
       .append(h4)
       .append(input);
+
+    this.attachAutocomplete(input, playlist);
+  },
+
+  /**
+   * Creates an autocompleting search input that allows the user to add songs 
+   * to the a playlist.
+   */
+  getSearchInput : function(playlist){
+    var input = $("<input>").addClass("xlarge")
+                  .attr("size", "30").attr("type","text");
+    return input;
+  },
+
+  /*
+   * This autocomplete plugin insists on the DOM node being already inserted
+   * into the DOM when it is being called. This is why this is a separate
+   * function.
+   */
+  attachAutocomplete : function (input, playlist){
+    var url = "http://api.soundcloud.com/tracks.json";
+    input.marcoPolo({
+        url: url,
+        data: {
+          client_id : SC.options.client_id
+        },
+        formatItem: function (data, $item) {
+          window.console.log(data.title);
+          return data.title;
+        },
+        onSelect: function (data, $item) {
+          window.location = data.profile_url;
+        }
+      });
   },
   
   /**
@@ -100,7 +133,7 @@ UI={
   },
 
   /**
-   * Creates a button to edit the title of a playlist
+   * Creates a button to edit the title of a playlist.
    */
   getEditButton : function(playlist){
     var that = this;
@@ -117,7 +150,7 @@ UI={
   },
 
   /**
-   * Persist the name change of a playlist
+   * Persist the name change of a playlist.
    */
   savePlaylistTitle : function(playlist){
     SC.post("/me/playlists", 
@@ -158,9 +191,9 @@ UI={
     });
   },
 
-/*
+  /*
    * Displays a notfication to the user.
-*/
+   */
   showNotification : function(text){
     var notifications = $("#notifications").removeClass("hidden");
     notifications.find("p").text(text);
