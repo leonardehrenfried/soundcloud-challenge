@@ -11,6 +11,12 @@
     margin-left: 10px;
 }
 
+#playlist-detail.mp_busy input{
+    background-image: url(https://github.com/dyve/jquery-autocomplete/raw/master/src/indicator.gif);
+    background-repeat: no-repeat;
+    background-position: 255px 5px;
+}
+
 #playlists-box h1 small{
     margin-top: 10px;
     float: right;
