@@ -104,6 +104,7 @@ UI={
         },
         onSelect: function (track) {
           playlist.tracks.push(track);
+          that.persistPlaylist(playlist);
           that.showPlaylist(playlist);
         }
       });
@@ -148,7 +149,7 @@ UI={
         var newTitle = prompt("Enter new title:");
         if(newTitle){
           playlist.title = newTitle;
-          that.savePlaylistTitle(playlist); 
+          that.persistPlaylist(playlist); 
           that.showPlaylist(playlist);
           that.renderPlaylists(that.playlists);
         }
@@ -158,20 +159,17 @@ UI={
   /**
    * Persists the name change of a playlist.
    */
-  savePlaylistTitle : function(playlist){
-    SC.post("/me/playlists", 
-            {
-              playlist:{
-                id:    playlist.id,
-                title: playlist.title
-              }
-            }, 
-            function(response, error){
-              if(error){
-                that.showNotification("Saving your playlist failed: "+error.message);
-              }
-      });
+  persistPlaylist : function(playlist){
+    var that = this;
+    SC.put("/playlists/"+playlist.id, { playlist:playlist },
+      function(response, error){
+        if(error){
+          that.showNotification("Saving your playlist failed: "+error.message);
+        }
+    });
   },
+
+  
 
   /**
    * Creates a new, empty playlist. The user needs change the name and 
