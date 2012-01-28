@@ -53,16 +53,21 @@ UI={
                 .append(this.getDeleteButton(playlist))
                 ;
     playlistContainer.append(h3);
-
-    if(playlist.tracks.length < 0){
-
+    
+    //render tracks
+    if(playlist.tracks.length > 0){
+      var ul = $("<ul>").addClass("tracks");
+      $.each(playlist.tracks, function(i, track){
+        var li = $("<li>").text(track.title +" by "+ track.user.username);
+        ul.append(li);
+      });
+      playlistContainer.append(ul);
     }
     else{
-      playlistContainer.append($("<div>")
-                               .text("This playlist doesn't contain any tracks yet."))
+      playlistContainer.append($("<div>").text("This playlist doesn't contain any tracks yet."))
     }
 
-    var h4 = $("<h5>").text("Add tracks to this playlist");
+    var h4 = $("<h6>").text("Add tracks to this playlist");
     var input = this.getSearchInput(playlist);
     playlistContainer
       .append(h4)
@@ -87,6 +92,7 @@ UI={
    * function.
    */
   attachAutocomplete : function (input, playlist){
+    var that = this;
     var url = "http://api.soundcloud.com/tracks.json";
     input.marcoPolo({
         url: url,
@@ -94,11 +100,11 @@ UI={
           client_id : SC.options.client_id
         },
         formatItem: function (data, $item) {
-          window.console.log(data.title);
-          return data.title;
+          return data.title + " (" + data.user.username + ")";
         },
-        onSelect: function (data, $item) {
-          window.location = data.profile_url;
+        onSelect: function (track) {
+          playlist.tracks.push(track);
+          that.showPlaylist(playlist);
         }
       });
   },
@@ -150,7 +156,7 @@ UI={
   },
 
   /**
-   * Persist the name change of a playlist.
+   * Persists the name change of a playlist.
    */
   savePlaylistTitle : function(playlist){
     SC.post("/me/playlists", 
