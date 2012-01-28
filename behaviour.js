@@ -5,9 +5,29 @@ SC.initialize({
 });
 
 $(document).ready(function(){
+  
   $("#login").click(function(){
     SC.connect(function(){
-      alert("it worked");
+      $("#login-box").hide();
     });
   });
+
+  $("#add-playlist").click(function(){
+    alert("adding playlist");
+    SC.post("/playlists.json", {
+      playlist:{
+        title   : "Horst",
+        sharing : "public",
+        tracks  : [{id:"1600572"},{id:"1600572"}]
+      }
+    },function(response, error){
+      if(error){
+        alert("an error occurred");
+      }
+      else{
+        alert("playlist created");
+      }
+    });
+  });
+
 });
