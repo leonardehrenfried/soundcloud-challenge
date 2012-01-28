@@ -5,3 +5,7 @@
 #playlists li{
     cursor: pointer;
 }
+
+#playlist-detail h3 button {
+    float: right;
+}

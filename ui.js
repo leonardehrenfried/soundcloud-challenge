@@ -23,14 +23,24 @@ UI={
    * Displays a playlist in the right hand panel.
    */
   showPlaylist : function(playlist){
+    var that = this;
     var playlistContainer = $("#playlist-detail").empty();
-    playlistContainer.append($("<h2>").text(playlist.title));
+    var editButton = $("<button>").addClass("btn").text("Edit title")
+                      .click(function(){
+                        var newTitle = prompt("Enter new title:");
+                        playlist.title = newTitle;
+                        that.showPlaylist(playlist);
+                      });
+    var h3 = $("<h3>").text(playlist.title)
+              .append(editButton);
+    playlistContainer.append(h3);
 
     if(playlist.tracks.length < 0){
     
     }
     else{
-      playlistContainer.append($("<div>").text("This playlist doesn't contain any tracks yet."))
+      playlistContainer.append($("<div>")
+                       .text("This playlist doesn't contain any tracks yet."))
     }
   },
   
