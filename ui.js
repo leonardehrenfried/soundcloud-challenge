@@ -47,7 +47,7 @@ UI={
     var editButton = this.getEditButton(playlist);
     var h3 = $("<h3>").text(playlist.title)
                 .append(this.getEditButton(playlist))
-                //.append(this.getEditButton(playlist))
+                .append(this.getDeleteButton(playlist))
                 ;
     playlistContainer.append(h3);
 
@@ -58,6 +58,24 @@ UI={
       playlistContainer.append($("<div>")
                                .text("This playlist doesn't contain any tracks yet."))
     }
+  },
+  
+  /**
+   * Creates a delete button for a playlist.
+   */
+  getDeleteButton : function(playlist){
+    var that = this;
+    return $("<button>").addClass("btn danger").text("Delete")
+      .click(function(){
+        SC.delete("/me/playlists/" + playlist.id, function(response, error){
+          if(error){
+            that.showNotification("Could not delete playlist: " + error.message);
+          }
+          else{
+            that.showNotification("Playlist " + playlist.title + " has been deleted.");
+          }
+        });
+      });
   },
 
   /**
