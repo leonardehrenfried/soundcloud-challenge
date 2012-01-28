@@ -73,6 +73,17 @@ UI={
           }
           else{
             that.showNotification("Playlist " + playlist.title + " has been deleted.");
+            
+            // because of the api caching I have to remove the playlist client-side, too
+            var newPlaylists = [];
+            $.each(that.playlists, function(i, oldPlaylist){
+              if(oldPlaylist.id !== playlist.id){
+                newPlaylists.push(oldPlaylist);
+              }
+            });
+            that.playlists = newPlaylists;
+            that.renderPlaylists(that.playlists);
+            that.showPlaylist(that.playlists[0]);
           }
         });
       });
