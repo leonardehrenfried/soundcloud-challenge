@@ -1,0 +1,7 @@
+.hidden{
+    display: none;
+}
+
+#playlists li{
+    cursor: pointer;
+}

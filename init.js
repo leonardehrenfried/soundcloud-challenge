@@ -10,14 +10,7 @@ $(document).ready(function(){
     SC.connect(function(){
       $("#login-box").remove();
       $("#playlists-box").removeClass("hidden");
-
-      SC.get("/me/playlists",{}, function(resp, err){
-        $.each(resp, function(i, playlist){
-          var li = $("<li>").text(playlist.title);
-          $("#playlists").append(li);
-        });
-      });
-
+      UI.refreshPlaylistList();
     });
   });
 
@@ -25,7 +18,7 @@ $(document).ready(function(){
     alert("adding playlist");
     SC.post("/playlists.json", {
       playlist:{
-        title   : "Horst",
+        title   : "New playlist",
         sharing : "public",
         tracks  : [{id:"1600572"},{id:"1600572"}]
       }
@@ -34,7 +27,7 @@ $(document).ready(function(){
         alert("an error occurred");
       }
       else{
-        alert("playlist created");
+        UI.refreshPlaylistList();
       }
     });
   });
