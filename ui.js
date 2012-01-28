@@ -5,6 +5,11 @@ UI={
   //cache
   playlists : [],
 
+  //global player object
+  player : null,
+
+  currentTrack: null,
+
   /**
    * Fetches playlists from the API and displays them on the left hand side
    * menu.
@@ -107,10 +112,12 @@ UI={
           playlist.tracks.push(track);
           that.persistPlaylist(playlist);
           that.showPlaylist(playlist);
-        }
+        },
+        delay : 400
       });
   },
-    /**
+  
+  /**
    * Creates a button to edit the title of a playlist.
    */
   getPlayButton : function(playlist){
@@ -118,8 +125,13 @@ UI={
     return $("<button>").addClass("btn info").text("Play songs")
       .click(function(){
         SC.whenStreamingReady(function(){
-          var soundObj = SC.stream(playlist.tracks[0].id);
-          soundObj.play();
+          if(that.currentTrack && that.player) {
+            that.player.stop(that.currentTrack.id);
+          }
+          that.player = SC.stream(playlist.tracks[0].id);
+          that.player.play();
+          that.updateTrackInfo(playlist.tracks[0], playlist);
+          that.currentTrack = playlist.tracks[0];
         });
     });
   },
@@ -215,6 +227,14 @@ UI={
     setTimeout(function(){
       notifications.addClass("hidden");
     }, 5000);
+  },
+
+  updateTrackInfo:function(track, playlist){
+    var info = $("#track-info");
+    var str = "Now playing: ";
+    str += track.title + " by " + track.user.username;
+    str += " from playlist '" + playlist.title + "'"; 
+    info.text(str);
   }
 };
 
