@@ -5,6 +5,8 @@
     <title>Soundcloud Playlist Editor</title>
     <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="http://connect.soundcloud.com/sdk.js" type="text/javascript"></script>
+    <script src="behaviour.js" type="text/javascript"></script>
   </head>
 
   <body>
@@ -30,10 +32,11 @@
       </header>
       <section id="about">
       <div class="page-header">
-        <h1>Search for songs</h1>
+        <h1>First, login to Soundcloud using OAuth</h1>
       </div>
       <div class="row">
         <div class="span-one-third">
+          <a id="login" class="btn large primary">Login</a>
         </div>
         <div class="span-one-third">
         </div>
