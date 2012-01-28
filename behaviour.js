@@ -6,16 +6,8 @@ SC.initialize({
 
 $(document).ready(function(){
   $("#login").click(function(){
-
-
     SC.connect(function(){
-      SC.put("/me/followings/3207", function(user, error){
-        if(error){
-          alert("Error: " + error.message);
-        }else{
-          alert("You are now following " + user.username);
-        }
-      });
+      alert("it worked");
     });
   });
 });
