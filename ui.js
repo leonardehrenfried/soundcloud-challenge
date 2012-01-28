@@ -51,6 +51,7 @@ UI={
     var h3 = $("<h3>").text(playlist.title)
                 .append(this.getEditButton(playlist))
                 .append(this.getDeleteButton(playlist))
+                .append(this.getPlayButton(playlist))
                 ;
     playlistContainer.append(h3);
     
@@ -67,7 +68,7 @@ UI={
       playlistContainer.append($("<div>").text("This playlist doesn't contain any tracks yet."))
     }
 
-    var h4 = $("<h6>").text("Add tracks to this playlist");
+    var h4 = $("<h6>").text("Search Soundcloud to add tracks to this playlist");
     var input = this.getSearchInput(playlist);
     playlistContainer
       .append(h4)
@@ -109,7 +110,19 @@ UI={
         }
       });
   },
-  
+    /**
+   * Creates a button to edit the title of a playlist.
+   */
+  getPlayButton : function(playlist){
+    var that = this;
+    return $("<button>").addClass("btn info").text("Play songs")
+      .click(function(){
+        SC.whenStreamingReady(function(){
+          var soundObj = SC.stream(playlist.tracks[0].id);
+          soundObj.play();
+        });
+    });
+  },
   /**
    * Creates a delete button for a playlist.
    */
@@ -168,8 +181,6 @@ UI={
         }
     });
   },
-
-  
 
   /**
    * Creates a new, empty playlist. The user needs change the name and 
