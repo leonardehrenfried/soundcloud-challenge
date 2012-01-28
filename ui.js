@@ -44,18 +44,11 @@ UI={
   showPlaylist : function(playlist){
     var that = this;
     var playlistContainer = $("#playlist-detail").empty();
-    var editButton = $("<button>").addClass("btn").text("Edit title")
-    .click(function(){
-      var newTitle = prompt("Enter new title:");
-      if(newTitle){
-        playlist.title = newTitle;
-        that.savePlaylistTitle(playlist); 
-        that.showPlaylist(playlist);
-        that.renderPlaylists(that.playlists);
-      }
-    });
+    var editButton = this.getEditButton(playlist);
     var h3 = $("<h3>").text(playlist.title)
-    .append(editButton);
+                .append(this.getEditButton(playlist))
+                //.append(this.getEditButton(playlist))
+                ;
     playlistContainer.append(h3);
 
     if(playlist.tracks.length < 0){
@@ -68,8 +61,25 @@ UI={
   },
 
   /**
+   * Creates a button to edit the title of a playlist
+   */
+  getEditButton : function(playlist){
+    var that = this;
+    return $("<button>").addClass("btn").text("Edit title")
+      .click(function(){
+        var newTitle = prompt("Enter new title:");
+        if(newTitle){
+          playlist.title = newTitle;
+          that.savePlaylistTitle(playlist); 
+          that.showPlaylist(playlist);
+          that.renderPlaylists(that.playlists);
+        }
+      });
+  },
+
+  /**
    * Persist the name change of a playlist
-*/
+   */
   savePlaylistTitle : function(playlist){
     SC.post("/me/playlists", 
             {
@@ -89,7 +99,7 @@ UI={
   /**
    * Creates a new, empty playlist. The user needs change the name and 
    * fill it with tracks afterwards.
-*/
+   */
   createPlaylist : function(){
     var that = this;
     SC.post("/playlists.json", {
