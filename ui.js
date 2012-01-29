@@ -118,23 +118,16 @@ UI={
   },
   
   /**
-   * Creates a button to edit the title of a playlist.
+   * Creates a button to play all the songs of a playlist.
    */
   getPlayButton : function(playlist){
     var that = this;
     return $("<button>").addClass("btn info").text("Play songs")
       .click(function(){
-        SC.whenStreamingReady(function(){
-          if(that.currentTrack && that.player) {
-            that.player.stop(that.currentTrack.id);
-          }
-          that.player = SC.stream(playlist.tracks[0].id);
-          that.player.play();
-          that.updateTrackInfo(playlist.tracks[0], playlist);
-          that.currentTrack = playlist.tracks[0];
-        });
-    });
+        that.playPlaylist(playlist);
+      });
   },
+
   /**
    * Creates a delete button for a playlist.
    */
@@ -195,6 +188,22 @@ UI={
   },
 
   /**
+   * Plays an entire playlist and displays track information.
+   */
+  playPlaylist : function(playlist){
+    var that = this;
+    SC.whenStreamingReady(function(){
+      if(that.currentTrack && that.player) {
+        that.player.stop(that.currentTrack.id);
+      }
+      that.player = SC.stream(playlist.tracks[0].id);
+      that.player.play();
+      that.updateTrackInfo(playlist.tracks[0], playlist);
+      that.currentTrack = playlist.tracks[0];
+    });
+  },
+
+  /**
    * Creates a new, empty playlist. The user needs change the name and 
    * fill it with tracks afterwards.
    */
@@ -208,7 +217,6 @@ UI={
       }
     },function(response, error){
       if(error){
-        window.console.log(error);
         that.showNotification(error);
       }
       else{
