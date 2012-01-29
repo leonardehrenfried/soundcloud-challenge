@@ -279,19 +279,21 @@ UI={
    */
   createPlaylist : function(){
     var that = this;
-    SC.post("/playlists.json", {
-      playlist:{
+    var playlist = {
         title   : "New playlist",
         sharing : "public",
-        tracks  : [{id:"1600572"},{id:"1600572"}]
-      }
-    },function(response, error){
+        tracks  : []
+    };
+
+    SC.post("/playlists.json", {playlist: playlist},function(response, error){
       if(error){
         that.showNotification(error);
       }
       else{
-        that.refreshPlaylistList();
+        //that.refreshPlaylistList();
+        that.playlists.push(response);
         that.showNotification("Playlist '" + response.title + "' created.");
+        that.renderPlaylists(that.playlists);
       }
     });
   },
