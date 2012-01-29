@@ -27,7 +27,7 @@
 }
 
 .tracks .tags{
-    overflow: scroll;
+    overflow: auto;
 }
 
 .tracks .tags .warning{
