@@ -124,7 +124,7 @@ UI={
     var that = this;
     return $("<button>").addClass("btn info").text("Play songs")
       .click(function(){
-        that.playPlaylist(playlist);
+        that.playPlaylist(playlist, 0);
       });
   },
 
@@ -190,16 +190,22 @@ UI={
   /**
    * Plays an entire playlist and displays track information.
    */
-  playPlaylist : function(playlist){
+  playPlaylist : function(playlist, index){
     var that = this;
     SC.whenStreamingReady(function(){
       if(that.currentTrack && that.player) {
         that.player.stop(that.currentTrack.id);
       }
-      that.player = SC.stream(playlist.tracks[0].id);
-      that.player.play();
-      that.updateTrackInfo(playlist.tracks[0], playlist);
-      that.currentTrack = playlist.tracks[0];
+      if(playlist && playlist.tracks[index]){
+        that.player = SC.stream(playlist.tracks[index].id);
+        that.player.play({
+          onfinish: function() {
+            that.playPlaylist(playlist, index++);
+          }
+        });
+        that.updateTrackInfo(playlist.tracks[index], playlist);
+        that.currentTrack = playlist.tracks[index];
+      }
     });
   },
 
@@ -237,6 +243,9 @@ UI={
     }, 5000);
   },
 
+  /**
+   * Set the current track and playlist display at the top.
+   */
   updateTrackInfo:function(track, playlist){
     var info = $("#track-info");
     var str = "Now playing: ";
