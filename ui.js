@@ -65,6 +65,7 @@ UI={
       var ul = $("<ul>").addClass("tracks");
       $.each(playlist.tracks, function(i, track){
         var li = $("<li>").text(track.title +" by "+ track.user.username);
+        li.append(that.getTags(track)); 
         ul.append(li);
       });
       playlistContainer.append(ul);
@@ -80,6 +81,23 @@ UI={
       .append(input);
 
     this.attachAutocomplete(input, playlist);
+  },
+  
+  /**
+   * Creates a div containing all tag labels.
+   */
+  getTags : function(track){
+    if(track.tag_list.length > 0){
+      var tagLabels = $("<div>").addClass("tags");
+      // Split the tag list into an array, unless the tag is in quotation marks
+      // http://stackoverflow.com/questions/1310473
+      var tags = track.tag_list.split(/ +(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/g);
+      $.each(tags, function(i, tag){
+        var label = $("<span>").addClass("label success").text(tag);
+        tagLabels.append(label);
+      });
+      return tagLabels;
+    }
   },
 
   /**
@@ -200,7 +218,8 @@ UI={
         that.player = SC.stream(playlist.tracks[index].id);
         that.player.play({
           onfinish: function() {
-            that.playPlaylist(playlist, index++);
+            index++;
+            that.playPlaylist(playlist, index);
           }
         });
         that.updateTrackInfo(playlist.tracks[index], playlist);

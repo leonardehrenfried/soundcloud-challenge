@@ -22,8 +22,12 @@
     float: right;
 }
 
+.tracks li{
+    overflow: auto;
+}
+
 .tracks .label{
-    margin-left: 10px;
+    margin-right: 5px;
 }
 
 /**
