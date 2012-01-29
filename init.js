@@ -4,7 +4,9 @@ $(document).ready(function(){
     $("#login-box").remove();
     $("#playlists-box").removeClass("hidden");
     UI.refreshPlaylistList(function(){
-      UI.showPlaylist(UI.playlists[0]);
+      if(UI.playlists.length > 0){
+        UI.showPlaylist(UI.playlists[0]);
+      }
     });
   };
 
