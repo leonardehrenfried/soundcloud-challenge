@@ -190,7 +190,9 @@ UI={
             });
             that.playlists = newPlaylists;
             that.renderPlaylists(that.playlists);
-            that.showPlaylist(that.playlists[0]);
+            if(that.playlists[0]){
+              that.showPlaylist(that.playlists[0]);
+            }
           }
         });
       });
