@@ -3,7 +3,7 @@
 This is my go at your coding challenge. I think I fulfilled most of the non-bonus
 requirements and I hope you like it.
 
-A few words about limitations: I'm using Soundcloud OAuth API for fetching
+A few words about limitations: I'm using the Soundcloud OAuth API for fetching
 playlists from a user and it seems that it has some severe caching in place.
 It basically takes 5-10 minutes for a newly created playlist as well as the 
 name change of to show up in the list of playlists.
