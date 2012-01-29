@@ -89,10 +89,12 @@ UI={
   getTags : function(track, playlist){
     var tagLabels = $("<div>").addClass("tags");
     tagLabels.append(this.getEditTagsButton(track, playlist));
-    if(track.tag_list.length > 0){
+
+    var tags = this.fetchTags(track);
+    if(!!tags){
       // Split the tag list into an array, unless the tag is in quotation marks
       // http://stackoverflow.com/questions/1310473
-      var tags = track.tag_list.split(/ +(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/g);
+      tags = tags.split(/ +(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/g);
       $.each(tags, function(i, tag){
         var label = $("<span>").addClass("label success").text(tag);
         tagLabels.append(label);
@@ -112,6 +114,7 @@ UI={
       var tagList = prompt("Edit tags for " + track.title, track.tag_list);
       if(tagList){
         track.tag_list = tagList;
+        that.persistTags(track);
         that.showPlaylist(playlist);
       }
     });
@@ -221,6 +224,28 @@ UI={
           that.showNotification("Saving your playlist failed: "+error.message);
         }
     });
+  },
+  
+  /**
+   * Persists the tags to local storage. I couldn't figure out how to tag 
+   * a track that isn't your own.
+   */
+  persistTags : function(track){
+    if(localStorage){
+      localStorage["tags-"+track.id] = track.tag_list;
+    }
+  },
+  
+  /**
+   * Fetches the tags from local storage (if they are there). 
+   */
+  fetchTags : function(track){
+    if(localStorage && localStorage["tags-" + track.id]){
+      return localStorage["tags-" + track.id];
+    }
+    else{
+      return track.tag_list;
+    }
   },
 
   /**
