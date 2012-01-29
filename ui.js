@@ -65,7 +65,7 @@ UI={
       var ul = $("<ul>").addClass("tracks");
       $.each(playlist.tracks, function(i, track){
         var li = $("<li>").text(track.title +" by "+ track.user.username);
-        li.append(that.getTags(track)); 
+        li.append(that.getTags(track, playlist)); 
         ul.append(li);
       });
       playlistContainer.append(ul);
@@ -86,9 +86,10 @@ UI={
   /**
    * Creates a div containing all tag labels.
    */
-  getTags : function(track){
+  getTags : function(track, playlist){
+    var tagLabels = $("<div>").addClass("tags");
+    tagLabels.append(this.getEditTagsButton(track, playlist));
     if(track.tag_list.length > 0){
-      var tagLabels = $("<div>").addClass("tags");
       // Split the tag list into an array, unless the tag is in quotation marks
       // http://stackoverflow.com/questions/1310473
       var tags = track.tag_list.split(/ +(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/g);
@@ -96,8 +97,25 @@ UI={
         var label = $("<span>").addClass("label success").text(tag);
         tagLabels.append(label);
       });
-      return tagLabels;
     }
+    tagLabels.append(track);
+    return tagLabels;
+  },
+  
+  /**
+   * Creates a button to edit the tags of the current track.
+   */
+  getEditTagsButton : function(track, playlist){
+    var that = this;
+    var button = $("<span>").addClass("label warning").text("Edit tags");
+    button.click(function(){
+      var tagList = prompt("Edit tags for " + track.title, track.tag_list);
+      if(tagList){
+        track.tag_list = tagList;
+        that.showPlaylist(playlist);
+      }
+    });
+    return button;
   },
 
   /**

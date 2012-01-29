@@ -23,7 +23,15 @@
 }
 
 .tracks li{
-    overflow: auto;
+    margin-top: 10px;
+}
+
+.tracks .tags{
+    overflow: scroll;
+}
+
+.tracks .tags .warning{
+    cursor: pointer;
 }
 
 .tracks .label{
